@@ -7,6 +7,7 @@ export function part1(input: string): any {
     .map((digit) => (digit === "0" ? "1" : "0"))
     .join("");
 
+  console.log({ gamma, epsilon });
   return parseInt(gamma, 2) * parseInt(epsilon, 2);
 }
 
