@@ -1,2 +1,2 @@
-export function part1(params: any): any {}
-export function part2(params: any): any {}
+export function part1(input: string): any {}
+export function part2(input: string): any {}

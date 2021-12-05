@@ -2,18 +2,18 @@ import { readFileSync } from "fs";
 import { resolve } from "path";
 import * as functions from ".";
 
-describe.skip("day x", () => {
+describe("day 5", () => {
   describe("part 1", () => {
-    test.only("sample data", () => {
+    test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part1(data);
-      expect(result).toBe("expected");
+      expect(result).toBe(5);
     });
 
     test("actual data", () => {
       const data = readFileSync(resolve(__dirname, "actual.txt"), "utf-8");
       const result = functions.part1(data);
-      expect(result).toBe("part_1_result");
+      expect(result).toBe(5124);
     });
   });
 
@@ -21,13 +21,13 @@ describe.skip("day x", () => {
     test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part2(data);
-      expect(result).toBe("expected");
+      expect(result).toBe(12);
     });
 
     test("actual data", () => {
       const data = readFileSync(resolve(__dirname, "actual.txt"), "utf-8");
       const result = functions.part2(data);
-      expect(result).toBe("part_2_result");
+      expect(result).toBe(19771);
     });
   });
 });
