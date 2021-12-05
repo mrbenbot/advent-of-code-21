@@ -1,24 +1,26 @@
-export function part1(input: string): number {
-  const directions = input.split(`\n`);
-  const board: number[][] = [[0]];
-  for (const direction of directions) {
-    const [from, to] = direction.split(" -> ").map((point) => {
+export function part1(input: string, includeDiagonals = false): number {
+  const lines = input.split(`\n`);
+  const heatMap: number[][] = [[0]];
+
+  for (const line of lines) {
+    const [from, to] = line.split(" -> ").map((point) => {
       return point.split(",").map(Number) as [number, number];
     });
-    const numberOfRowsToAdd = Math.max(from[1], to[1]) - board.length + 1;
-    const numberOfColumnsToAdd = Math.max(from[0], to[0]) - board[0].length + 1;
+    const numberOfRowsToAdd = Math.max(from[1], to[1]) - heatMap.length + 1;
+    const numberOfColumnsToAdd =
+      Math.max(from[0], to[0]) - heatMap[0].length + 1;
 
     if (numberOfRowsToAdd > 0) {
-      add(board, "rows", numberOfRowsToAdd);
+      add(heatMap, "rows", numberOfRowsToAdd);
     }
     if (numberOfColumnsToAdd > 0) {
-      add(board, "columns", numberOfColumnsToAdd);
+      add(heatMap, "columns", numberOfColumnsToAdd);
     }
 
-    drawLine(board, from, to);
+    drawLine(heatMap, from, to, includeDiagonals);
   }
 
-  return board.reduce(
+  return heatMap.reduce(
     (acc, cur) =>
       acc + cur.reduce((total, num) => total + (num > 1 ? 1 : 0), 0),
     0
@@ -27,12 +29,12 @@ export function part1(input: string): number {
 
 function add(
   board: number[][],
-  rowOrColumn: "rows" | "columns",
+  rowsOrColumns: "rows" | "columns",
   number: number
 ) {
   for (let i = 0; i < number; i++) {
-    if (rowOrColumn === "rows") {
-      board.push([...Array(board[0].length)].fill(0));
+    if (rowsOrColumns === "rows") {
+      board.push(Array(board[0].length).fill(0));
     } else {
       board.forEach((row) => {
         row.push(0);
@@ -42,38 +44,14 @@ function add(
 }
 
 export function part2(input: string): number {
-  const directions = input.split(`\n`);
-  const board: number[][] = [[0]];
-  for (const direction of directions) {
-    const [from, to] = direction
-      .split(" -> ")
-      .map((point) => point.split(",").map(Number) as [number, number]);
-
-    const numberOfRowsToAdd = Math.max(from[1], to[1]) - board.length + 1;
-    const numberOfColumnsToAdd = Math.max(from[0], to[0]) - board[0].length + 1;
-
-    if (numberOfRowsToAdd > 0) {
-      add(board, "rows", numberOfRowsToAdd);
-    }
-    if (numberOfColumnsToAdd > 0) {
-      add(board, "columns", numberOfColumnsToAdd);
-    }
-
-    drawLine(board, from, to, true);
-  }
-
-  return board.reduce(
-    (acc, cur) =>
-      acc + cur.reduce((total, num) => total + (num > 1 ? 1 : 0), 0),
-    0
-  );
+  return part1(input, true);
 }
 
 function drawLine(
   board: number[][],
   from: [number, number],
   to: [number, number],
-  allowDiagonals?: boolean
+  includeDiagonals?: boolean
 ) {
   if (from[0] !== to[0] && from[1] === to[1]) {
     const y = from[1];
@@ -87,7 +65,7 @@ function drawLine(
     for (let y = fromY; y <= toY; y++) {
       board[y][x] += 1;
     }
-  } else if (allowDiagonals) {
+  } else if (includeDiagonals) {
     const [fromX, fromY] = from;
     const [toX, toY] = to;
     for (let i = 0; i <= Math.abs(fromX - toX); i++) {
@@ -97,20 +75,3 @@ function drawLine(
     }
   }
 }
-
-const pretty = ({
-  from,
-  to,
-  numberOfColumnsToAdd,
-  numberOfRowsToAdd,
-  board,
-}: any): string => {
-  return `\n\n\n------ DRAWN A LINE -----------
-from: ${from}
-to: ${to}
-numberOfColumnsToAdd: ${numberOfColumnsToAdd}
-numberOfRowsToAdd: ${numberOfRowsToAdd}
-board: 
-${board.map((row: any) => row.join(" ")).join(`\n`)}
-        `;
-};
