@@ -1,3 +1,5 @@
+import { writeFileSync } from "fs";
+
 export function part1(input: string, includeDiagonals = false): number {
   const lines = input.split(`\n`);
   const heatMap: number[][] = [[0]];
@@ -19,6 +21,8 @@ export function part1(input: string, includeDiagonals = false): number {
 
     drawLine(heatMap, from, to, includeDiagonals);
   }
+
+  writeFileSync("heatMap.json", JSON.stringify(heatMap));
 
   return heatMap.reduce(
     (acc, cur) =>
