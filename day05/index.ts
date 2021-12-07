@@ -1,6 +1,12 @@
-import { writeFileSync } from "fs";
+export function part1(input: string): number {
+  return getHeatMapTotal(input, false);
+}
 
-export function part1(input: string, includeDiagonals = false): number {
+export function part2(input: string): number {
+  return getHeatMapTotal(input, true);
+}
+
+function getHeatMapTotal(input: string, includeDiagonals = false): number {
   const lines = input.split(`\n`);
   const heatMap: number[][] = [[0]];
 
@@ -21,8 +27,6 @@ export function part1(input: string, includeDiagonals = false): number {
 
     drawLine(heatMap, from, to, includeDiagonals);
   }
-
-  writeFileSync("heatMap.json", JSON.stringify(heatMap));
 
   return heatMap.reduce(
     (acc, cur) =>
@@ -45,10 +49,6 @@ function add(
       });
     }
   }
-}
-
-export function part2(input: string): number {
-  return part1(input, true);
 }
 
 function drawLine(
