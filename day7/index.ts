@@ -1,55 +1,38 @@
-export function part1(input: string): any {
-  const horizontalPositions = input
-    .split(",")
-    .map(Number)
-    .sort((a, b) => b - a);
-
-  let total = Number.MAX_VALUE;
-
-  for (let i = 0; i < horizontalPositions[0]; i++) {
-    const totalForI = horizontalPositions.reduce((acc, cur) => {
-      return acc + Math.abs(cur - i);
-    }, 0);
-
-    if (totalForI < total) {
-      total = totalForI;
-    }
-  }
-  return total;
-}
-
-export function part2(input: string): any {
-  const horizontalPositions = input
-    .split(",")
-    .map(Number)
-    .sort((a, b) => b - a);
-
-  const fuelUsageMemo = {};
-  let total = Number.MAX_VALUE;
-
-  for (let i = 0; i < horizontalPositions[0]; i++) {
-    const totalForI = horizontalPositions.reduce((acc, cur) => {
-      return acc + getTotalFuelUsage(Math.abs(cur - i), fuelUsageMemo);
-    }, 0);
-
-    if (totalForI < total) {
-      total = totalForI;
-    }
-  }
-  return total;
-}
-
-function getTotalFuelUsage(
-  number: number,
-  memo: { [key: number]: number }
+export function calcMinFuel(
+  sortedPositions: number[],
+  usageFormula: (number: number) => number
 ): number {
-  if (number <= 0) {
-    return number;
+  let total = Number.MAX_VALUE;
+
+  for (let i = 0; i < sortedPositions[0]; i++) {
+    const totalForI = sortedPositions.reduce((acc, cur) => {
+      return acc + usageFormula(Math.abs(cur - i));
+    }, 0);
+
+    if (totalForI > total) {
+      return total;
+    }
+    total = totalForI;
   }
-  if (memo.hasOwnProperty(number)) {
-    return memo[number];
-  }
-  const result = number + getTotalFuelUsage(number - 1, memo);
-  memo[number] = result;
-  return result;
+  return total;
+}
+
+export function part1(input: string): number {
+  return calcMinFuel(
+    input
+      .split(",")
+      .map(Number)
+      .sort((a, b) => b - a),
+    (diff) => diff
+  );
+}
+
+export function part2(input: string): number {
+  return calcMinFuel(
+    input
+      .split(",")
+      .map(Number)
+      .sort((a, b) => b - a),
+    (diff) => (diff * (diff + 1)) / 2
+  );
 }
