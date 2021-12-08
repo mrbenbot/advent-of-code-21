@@ -1,6 +1,5 @@
-export function part1(input: string): any {
-  const lines = input.split(`\n`);
-  return lines.reduce((acc, line) => {
+export function part1(input: string): number {
+  return input.split(`\n`).reduce((acc, line) => {
     const [_, output] = line.split(" | ").map((part) => part.split(" "));
 
     const oneFourSevenEights = output.filter((num) =>
@@ -17,9 +16,8 @@ const lengthToNumber: { [key: number]: string } = {
   2: "one",
 };
 
-export function part2(input: string): any {
-  const lines = input.split(`\n`);
-  return lines.reduce((acc, line) => {
+export function part2(input: string): number {
+  return input.split(`\n`).reduce((acc, line) => {
     const [input, output] = line.split(" | ").map((part) => part.split(" "));
     const joined = input.concat(output).map((str) => [...str].sort().join(""));
 
@@ -50,9 +48,9 @@ export function part2(input: string): any {
 
     // b is the the letter that are different between 1 and 4 not in 3
     // d is the the letter that are different between 1 and 4 and is in 3
-    const [b, d] = diffSignal(one, four)
-      .split("")
-      .sort((a) => (three.includes(a) ? 1 : -1));
+    const [b, d] = diffSignal(one, four).sort((a) =>
+      three.includes(a) ? 1 : -1
+    );
 
     // two is the 5 length signal that does not contain b and is not equal to three
     const two = joined.find(
@@ -92,18 +90,16 @@ export function part2(input: string): any {
 
     numberMap[nine] = 9;
 
-    const total = output
-      .map((str) => [...str].sort().join(""))
-      .reduce((acc, cur) => `${acc}${numberMap[cur]}`, "");
+    const total = output.reduce((acc, cur) => {
+      const key = [...cur].sort().join("");
+      return `${acc}${numberMap[key]}`;
+    }, "");
 
     return acc + Number(total);
   }, 0);
 }
 
-function diffSignal(a: string, b: string): string {
+function diffSignal(a: string, b: string): string[] {
   const [longer, shorter] = [a, b].sort((a, b) => b.length - a.length);
-  const diff = [...longer]
-    .filter((letter) => !shorter.includes(letter))
-    .join("");
-  return diff;
+  return [...longer].filter((letter) => !shorter.includes(letter));
 }
