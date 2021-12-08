@@ -4,16 +4,16 @@ import * as functions from ".";
 
 describe("day 8", () => {
   describe("part 1", () => {
-    test.only("sample data", () => {
+    test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part1(data);
-      expect(result).toBe("expected");
+      expect(result).toBe(26);
     });
 
     test("actual data", () => {
       const data = readFileSync(resolve(__dirname, "actual.txt"), "utf-8");
       const result = functions.part1(data);
-      expect(result).toBe("part_1_result");
+      expect(result).toBe(365);
     });
   });
 
@@ -21,13 +21,13 @@ describe("day 8", () => {
     test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part2(data);
-      expect(result).toBe("expected");
+      expect(result).toBe(61229);
     });
 
     test("actual data", () => {
       const data = readFileSync(resolve(__dirname, "actual.txt"), "utf-8");
       const result = functions.part2(data);
-      expect(result).toBe("part_2_result");
+      expect(result).toBe(975706);
     });
   });
 });
