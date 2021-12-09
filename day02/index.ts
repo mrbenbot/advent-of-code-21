@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/2
+
 export function part1(input: string): number {
   const [horizontal, vertical] = input.split(`\n`).reduce(
     ([horizontal, vertical], cur) => {

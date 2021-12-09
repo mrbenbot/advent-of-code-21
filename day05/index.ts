@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/5
+
 export function part1(input: string): number {
   return getHeatMapTotal(input, false);
 }

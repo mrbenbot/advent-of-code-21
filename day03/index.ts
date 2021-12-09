@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/3
+
 export function part1(input: string): any {
   const lines = input.split(`\n`);
   const mostCommon = findMostCommon(lines);

@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/4
+
 export function part1(input: string): number {
   const [numbers, ...boards] = input.split(`\n\n`);
   const boardMatixs = boards.map((board) =>

@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/7
+
 export function part1(input: string): number {
   return calcMinFuel(
     input

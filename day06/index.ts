@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/6
+
 export function part1(input: string): number {
   return calculateLanternFish(input.split(","), 80);
 }

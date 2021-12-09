@@ -1,3 +1,5 @@
+// https://adventofcode.com/2021/day/8
+
 export function part1(input: string): number {
   return input.split(`\n`).reduce((acc, line) => {
     const [_, output] = line.split(" | ").map((part) => part.split(" "));
