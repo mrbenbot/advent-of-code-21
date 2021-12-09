@@ -1,27 +1,27 @@
 // https://adventofcode.com/2021/day/9
 
 export function part1(input: string): any {
-  const heightMap = input.split(`\n`).map((line) => [...line].map(Number));
-
-  let total = 0;
-  for (let y = 0; y < heightMap.length; y++) {
-    for (let x = 0; x < heightMap[y].length; x++) {
-      if (isLowest(heightMap, { y, x })) {
-        total += heightMap[y][x] + 1;
-      }
-    }
-  }
-  return total;
+  return input
+    .split(`\n`)
+    .map((line) => [...line].map(Number))
+    .reduce(
+      (total, row, y, heightMap) =>
+        total +
+        row.reduce((rowTotal, point, x) => {
+          if (isLowest(heightMap, { y, x })) {
+            return rowTotal + point + 1;
+          }
+          return rowTotal;
+        }, 0),
+      0
+    );
 }
 
 export function part2(input: string): number {
   const heightMap = input.split(`\n`).map((line) => [...line].map(Number));
-  const points = getLowestPoints(heightMap);
-  const basinSizes = points
-    .map((lowPoint) => {
-      const qResult = getBasinSize(heightMap, lowPoint);
-      return qResult;
-    })
+
+  const basinSizes = getLowestPoints(heightMap)
+    .map((lowPoint) => getBasinSize(heightMap, lowPoint))
     .sort((a, b) => b - a)
     .slice(0, 3);
 
@@ -37,39 +37,32 @@ const directions: { [key: string]: (point: Point) => Point } = {
   right: ({ y, x }) => ({ y, x: x + 1 }),
 };
 
+const directionOptions = Object.values(directions);
+
 function getBasinSize(heightMap: number[][], { x, y }: Point): number {
   const queue = [{ x, y }];
   let index = 0;
 
-  while (true) {
-    if (index >= queue.length) {
-      return queue.length;
+  while (index < queue.length) {
+    const currentPointValue = heightMap[queue[index].y]?.[queue[index].x];
+
+    for (const transform of directionOptions) {
+      const nextPoint = transform(queue[index]);
+      const nextPointValue = heightMap[nextPoint.y]?.[nextPoint.x];
+
+      const isNextPointValid =
+        nextPointValue !== 9 &&
+        currentPointValue < nextPointValue &&
+        !queue.some(({ x, y }) => x === nextPoint.x && y === nextPoint.y);
+
+      if (isNextPointValid) {
+        queue.push(nextPoint);
+      }
     }
-
-    const nextSquares = ["up", "down", "left", "right"].reduce(
-      (acc: Point[], cur) => {
-        const nextSquare = directions[cur](queue[index]);
-
-        const isNextSquareValid =
-          heightMap[nextSquare.y]?.[nextSquare.x] !== 9 &&
-          heightMap[queue[index].y]?.[queue[index].x] <
-            heightMap[nextSquare.y]?.[nextSquare.x] &&
-          !queue.some(
-            (point) => point.x === nextSquare.x && point.y === nextSquare.y
-          );
-
-        if (isNextSquareValid) {
-          acc.push(nextSquare);
-        }
-        return acc;
-      },
-      []
-    );
-
-    queue.push(...nextSquares);
-
     index++;
   }
+
+  return queue.length;
 }
 
 function getLowestPoints(heightMap: number[][]): Point[] {
