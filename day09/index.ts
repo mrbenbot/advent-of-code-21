@@ -19,9 +19,8 @@ export function part2(input: string): number {
   const points = getLowestPoints(heightMap);
   const basinSizes = points
     .map((lowPoint) => {
-      const visited = {};
-      getBasinSize(heightMap, lowPoint, visited);
-      return Object.keys(visited).length;
+      const qResult = getBasinSize(heightMap, lowPoint);
+      return qResult;
     })
     .sort((a, b) => b - a)
     .slice(0, 3);
@@ -31,30 +30,46 @@ export function part2(input: string): number {
 
 type Point = { x: number; y: number };
 
-function getBasinSize(
-  heightMap: number[][],
-  { x, y }: Point,
-  visited: { [key: string]: boolean } = {}
-): void {
-  visited[`${y}-${x}`] = true;
+const directions: { [key: string]: (point: Point) => Point } = {
+  up: ({ y, x }) => ({ y: y - 1, x }),
+  down: ({ y, x }) => ({ y: y + 1, x }),
+  left: ({ y, x }) => ({ y, x: x - 1 }),
+  right: ({ y, x }) => ({ y, x: x + 1 }),
+};
 
-  const options = [
-    { y, x: x + 1 },
-    { y, x: x - 1 },
-    { y: y - 1, x },
-    { y: y + 1, x },
-  ].filter((p) => {
-    const hasBeenVisited = visited[`${p.y}-${p.x}`];
-    const isHigherThanPrevious = heightMap[y]?.[x] < heightMap[p.y]?.[p.x];
-    const isNot9 = heightMap[p.y]?.[p.x] !== 9;
-    return !hasBeenVisited && isHigherThanPrevious && isNot9;
-  });
+function getBasinSize(heightMap: number[][], { x, y }: Point): number {
+  const queue = [{ x, y }];
+  let index = 0;
 
-  if (options.length === 0) {
-    return;
+  while (true) {
+    if (index >= queue.length) {
+      return queue.length;
+    }
+
+    const nextSquares = ["up", "down", "left", "right"].reduce(
+      (acc: Point[], cur) => {
+        const nextSquare = directions[cur](queue[index]);
+
+        const isNextSquareValid =
+          heightMap[nextSquare.y]?.[nextSquare.x] !== 9 &&
+          heightMap[queue[index].y]?.[queue[index].x] <
+            heightMap[nextSquare.y]?.[nextSquare.x] &&
+          !queue.some(
+            (point) => point.x === nextSquare.x && point.y === nextSquare.y
+          );
+
+        if (isNextSquareValid) {
+          acc.push(nextSquare);
+        }
+        return acc;
+      },
+      []
+    );
+
+    queue.push(...nextSquares);
+
+    index++;
   }
-
-  options.forEach((option) => getBasinSize(heightMap, option, visited));
 }
 
 function getLowestPoints(heightMap: number[][]): Point[] {

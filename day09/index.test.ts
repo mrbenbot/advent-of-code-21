@@ -17,7 +17,7 @@ describe("day 9", () => {
     });
   });
 
-  describe.only("part 2", () => {
+  describe("part 2", () => {
     test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part2(data);
