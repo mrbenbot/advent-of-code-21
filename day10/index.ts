@@ -25,10 +25,8 @@ export function getScoreForCorruptLine(line: string[]): number {
     if (["(", "[", "{", "<"].includes(bracket)) {
       stack.push(bracket);
     } else {
-      const lastBracket = stack[stack.length - 1];
-      if (conversion[bracket] === lastBracket) {
-        stack.pop();
-      } else {
+      const lastBracket = stack.pop();
+      if (conversion[bracket] !== lastBracket) {
         return corrupScores[bracket];
       }
     }
@@ -44,10 +42,8 @@ export function getScoreForIncompleteLine(line: string[]): number {
     if (["(", "[", "{", "<"].includes(bracket)) {
       stack.push(bracket);
     } else {
-      const lastBracket = stack[stack.length - 1];
-      if (conversion[bracket] === lastBracket) {
-        stack.pop();
-      } else {
+      const lastBracket = stack.pop();
+      if (conversion[bracket] !== lastBracket) {
         return 0;
       }
     }
