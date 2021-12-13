@@ -1,27 +1,16 @@
-// https://adventofcode.com/2021/day/n
+// https://adventofcode.com/2021/day/13
 
 export function part1(input: string): any {
   const [pointInput, foldInput] = input
     .split(`\n\n`)
     .map((section) => section.split(`\n`));
 
-  let points = pointInput.map((line) => {
-    const [x, y] = line.split(",").map(Number);
-    return new FoldablePoint({ x, y });
-  });
+  const points = foldPoints(pointInput, foldInput.slice(0, 1));
 
-  foldInput.slice(0, 1).forEach((line) => {
-    const [axis, value] = line.replace("fold along ", "").split("=");
-    points.forEach((point) => {
-      point.fold(axis as "x" | "y", Number(value));
-    });
-    points = points.filter(
-      (point, i) =>
-        points.findIndex((otherPoint) => point.isSame(otherPoint)) === i
-    );
-  });
-
-  return points.length;
+  return points.filter(
+    (point, i) =>
+      points.findIndex((otherPoint) => point.isSame(otherPoint)) === i
+  ).length;
 }
 
 export function part2(input: string): string {
@@ -29,7 +18,16 @@ export function part2(input: string): string {
     .split(`\n\n`)
     .map((section) => section.split(`\n`));
 
-  let points = pointInput.map((line) => {
+  const points = foldPoints(pointInput, foldInput);
+
+  return pointsToDrawing(points);
+}
+
+function foldPoints(
+  pointInput: string[],
+  foldInput: string[]
+): FoldablePoint[] {
+  const points = pointInput.map((line) => {
     const [x, y] = line.split(",").map(Number);
     return new FoldablePoint({ x, y });
   });
@@ -39,12 +37,12 @@ export function part2(input: string): string {
     points.forEach((point) => {
       point.fold(axis as "x" | "y", Number(value));
     });
-    points = points.filter(
-      (point, i) =>
-        points.findIndex((otherPoint) => point.isSame(otherPoint)) === i
-    );
   });
 
+  return points;
+}
+
+function pointsToDrawing(points: IPoint[]): string {
   const foldedPaper: string[][] = [[" "]];
 
   points.forEach(({ y, x }) => {
