@@ -1,7 +1,7 @@
 // https://adventofcode.com/2021/day/11
 
 export function part1(input: string): any {
-  const octopusLevels = input
+  const octopusMatrix = input
     .split(`\n`)
     .map((line) => [...line].map((value) => new Octopus(Number(value))));
 
@@ -10,7 +10,7 @@ export function part1(input: string): any {
   for (let n = 0; n < 100; n++) {
     const queue: Point[] = [];
 
-    octopusLevels.forEach((row, y) =>
+    octopusMatrix.forEach((row, y) =>
       row.forEach((octopus, x) => {
         const hasFlashed = octopus.increment(n);
         if (hasFlashed) {
@@ -22,7 +22,7 @@ export function part1(input: string): any {
     for (let i = 0; i < queue.length; i++) {
       directionOptions.forEach((transform) => {
         const adjacentPoint = transform(queue[i]);
-        const octopus = octopusLevels?.[adjacentPoint.y]?.[adjacentPoint.x];
+        const octopus = octopusMatrix?.[adjacentPoint.y]?.[adjacentPoint.x];
 
         const hasFlashed = octopus?.increment(n);
         if (hasFlashed) {
@@ -36,14 +36,14 @@ export function part1(input: string): any {
 }
 
 export function part2(input: string): number {
-  const octopusLevels = input
+  const octopusMatrix = input
     .split(`\n`)
     .map((line) => [...line].map((value) => new Octopus(Number(value))));
 
   for (let n = 0; true; n++) {
     const queue: Point[] = [];
 
-    octopusLevels.forEach((row, y) =>
+    octopusMatrix.forEach((row, y) =>
       row.forEach((octopus, x) => {
         const hasFlashed = octopus.increment(n);
         if (hasFlashed) {
@@ -55,7 +55,7 @@ export function part2(input: string): number {
     for (let i = 0; i < queue.length; i++) {
       directionOptions.forEach((transform) => {
         const adjacentPoint = transform(queue[i]);
-        const octopus = octopusLevels?.[adjacentPoint.y]?.[adjacentPoint.x];
+        const octopus = octopusMatrix?.[adjacentPoint.y]?.[adjacentPoint.x];
 
         const hasFlashed = octopus?.increment(n);
         if (hasFlashed) {
@@ -64,7 +64,7 @@ export function part2(input: string): number {
       });
     }
 
-    if (queue.length === Math.pow(octopusLevels.length, 2)) {
+    if (queue.length === Math.pow(octopusMatrix.length, 2)) {
       return n + 1;
     }
   }
