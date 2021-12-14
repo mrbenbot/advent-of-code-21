@@ -20,7 +20,7 @@ export function part2(input: string): string {
 
   const points = foldPoints(pointInput, foldInput);
 
-  return pointsToDrawing(points);
+  return drawPoints(points);
 }
 
 function foldPoints(
@@ -42,7 +42,7 @@ function foldPoints(
   return points;
 }
 
-function pointsToDrawing(points: IPoint[]): string {
+function drawPoints(points: IPoint[]): string {
   const foldedPaper: string[][] = [[" "]];
 
   points.forEach(({ y, x }) => {
