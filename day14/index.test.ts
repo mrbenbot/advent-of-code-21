@@ -18,7 +18,7 @@ describe("day 14", () => {
   });
 
   describe("part 2", () => {
-    test.only("sample data", () => {
+    test("sample data", () => {
       const data = readFileSync(resolve(__dirname, "sample.txt"), "utf-8");
       const result = functions.part2(data);
       expect(result).toBe(2188189693529);
@@ -27,7 +27,7 @@ describe("day 14", () => {
     test("actual data", () => {
       const data = readFileSync(resolve(__dirname, "actual.txt"), "utf-8");
       const result = functions.part2(data);
-      expect(result).toBe("part_2_result");
+      expect(result).toBe(4302675529689);
     });
   });
 });
