@@ -35,11 +35,9 @@ export function getResultForN(
     }, {});
   }
 
-  const [first, ...rest] = Object.values(getTotals(pairs, polymers[0])).sort(
-    (a, b) => a - b
-  );
+  const totals = Object.values(getTotals(pairs, polymers[0]));
 
-  return rest[rest.length - 1] - first;
+  return Math.max(...totals) - Math.min(...totals);
 }
 
 function getTotals(pairs: CountMap, first: string): CountMap {
