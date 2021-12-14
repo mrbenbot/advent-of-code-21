@@ -19,11 +19,11 @@ function createCaveMap(connectionlines: string[]): CaveMap {
   }, {});
 }
 
-const mapConnection = (connections: CaveMap, a: string, b: string) => {
-  const connectObj = a in connections ? connections[a] : new Cave(a);
+function mapConnection(connections: CaveMap, a: string, b: string): void {
+  const connectObj = a in connections ? connections[a] : createCave(a);
   connectObj.connections.push(b);
   connections[a] = connectObj;
-};
+}
 
 function countCavePaths(
   map: CaveMap,
@@ -52,18 +52,21 @@ function countCavePaths(
   }, 0);
 }
 
-class Cave {
+function createCave(name: string): Cave {
+  return {
+    name,
+    connections: [],
+    isSmall: name.toLowerCase() === name,
+    neverTwice: ["start", "end"].includes(name),
+  };
+}
+
+type Cave = {
   connections: string[];
   isSmall: boolean;
   name: string;
   neverTwice: boolean;
-  constructor(name: string) {
-    this.name = name;
-    this.connections = [];
-    this.isSmall = name.toLowerCase() === name;
-    this.neverTwice = ["start", "end"].includes(name);
-  }
-}
+};
 
 type CaveMap = {
   [key: string]: Cave;
